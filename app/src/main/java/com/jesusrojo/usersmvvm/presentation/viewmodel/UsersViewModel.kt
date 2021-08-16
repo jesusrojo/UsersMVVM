@@ -17,11 +17,7 @@ class UsersViewModel @Inject constructor(
     fetchUsersUseCase: FetchUsersUseCase,
     deleteAllUsersUseCase: DeleteAllUsersUseCase,
     ioDispatcher: CoroutineDispatcher
-) : BaseUsersViewModel(
-    fetchUsersUseCase,
-    deleteAllUsersUseCase,
-    ioDispatcher
-) {
+) : BaseUsersViewModel(fetchUsersUseCase, deleteAllUsersUseCase, ioDispatcher) {
 
     private val _resource: MutableLiveData<Resource<List<User>>> = MutableLiveData()
     val resource: LiveData<Resource<List<User>>> = _resource
@@ -77,22 +73,15 @@ class UsersViewModel @Inject constructor(
     @WorkerThread
     private suspend fun fetchDatasFromUseCase() {
         DebugHelp.l("fetchDatasFromUseCase")
-
         updateUiLoading()
-
         wrapEspressoIdlingResource {
-
             try {
-
                 val resultResource = fetchUsersUseCase.execute()
                 updateUiResource(resultResource)
-
             } catch (e: Exception) {
-
                 DebugHelp.l("ERROR $e")
                 updateUiError("$e")
             }
-
         }
     }
 }

@@ -68,7 +68,7 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun handleResponse(response: Response<List<UserRaw>>): Resource<List<User>>{
+    private suspend fun handleResponse(response: Response<List<UserRaw>>): Resource<List<User>>{
         var results: List<User>? = null
         if (response.isSuccessful) {
             val body = response.body()
@@ -76,11 +76,12 @@ class UsersRepositoryImpl @Inject constructor(
                 val rawDatas: List<UserRaw> = body
                 if (rawDatas != null) {
                     results = mapper(rawDatas)
+                    localDataSource.saveAllToDB(results)
                     return Resource.Success(results)
                 }
             }
         }
-        return Resource.Error(response.code().toString())
+        return Resource.Error(response.errorBody().toString())
     }
 
     override suspend fun deleteAll() {

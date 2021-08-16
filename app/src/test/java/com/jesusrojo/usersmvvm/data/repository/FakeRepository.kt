@@ -2,6 +2,7 @@ package com.jesusrojo.usersmvvm.data.repository
 
 import com.jesusrojo.usersmvvm.data.model.*
 import com.jesusrojo.usersmvvm.domain.repository.UsersRepository
+import com.jesusrojo.usersmvvm.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 
@@ -13,8 +14,8 @@ class FakeRepository : UsersRepository {
         datas = getFakeListItemsOneTwo().toMutableList()
     }
 
-    override suspend fun fetchUsers(): List<User>? {
-        return datas
+    override suspend fun fetchUsers(): Resource<List<User>> {
+        return Resource.Success(datas)
     }
 
 //    override suspend fun fetchUsersFlow(): Flow<Result<List<User>>> {

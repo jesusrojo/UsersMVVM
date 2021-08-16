@@ -7,6 +7,7 @@ import com.jesusrojo.usersmvvm.data.repository.datasource.UsersLocalDataSource
 import com.jesusrojo.usersmvvm.data.repository.datasource.UsersRemoteDataSource
 import com.jesusrojo.usersmvvm.data.model.mappers.MapperRawToEnty
 import com.jesusrojo.usersmvvm.utils.BaseUnitTest
+import com.jesusrojo.usersmvvm.utils.Resource
 import com.jesusrojo.usersmvvm.utils.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -35,7 +36,7 @@ class UserRepositoryImplTest: BaseUnitTest() {
             val datas = FakeRepository.getFakeListItemsOneTwo()
             whenever(cacheDataSource.fetchDatasFromCache()).thenReturn(datas)
             val results = sut.fetchUsers()
-            assertThat(results).isEqualTo(datas)
+            assertThat(results.data).isEqualTo(datas)
             verify(cacheDataSource, times(1)).fetchDatasFromCache()
         }
 
@@ -46,7 +47,7 @@ class UserRepositoryImplTest: BaseUnitTest() {
             whenever(cacheDataSource.fetchDatasFromCache()).thenReturn(null)
             whenever(localDataSource.fetchAllInDB()).thenReturn(datas)
             val results = sut.fetchUsers()
-            assertThat(results).isEqualTo(datas)
+            assertThat(results.data).isEqualTo(datas)
             verify(cacheDataSource, times(1)).fetchDatasFromCache()
             verify(localDataSource, times(1)).fetchAllInDB()
         }
