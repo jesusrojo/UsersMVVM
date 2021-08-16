@@ -13,7 +13,7 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
-class UsersViewModel @Inject constructor(
+class UsersViewModelWithGetList @Inject constructor(
     fetchUsersUseCase: FetchUsersUseCase,
     deleteAllUsersUseCase: DeleteAllUsersUseCase,
     ioDispatcher: CoroutineDispatcher
@@ -34,8 +34,8 @@ class UsersViewModel @Inject constructor(
         _resource.postValue(Resource.Error(message))
     }
 
-    private fun updateUiSuccess(newResource: Resource<List<User>>) {
-        _resource.postValue(newResource)
+    private fun updateUiSuccess(users: List<User>) {
+        _resource.postValue(Resource.Success(users))
     }
 
     init {
@@ -52,7 +52,7 @@ class UsersViewModel @Inject constructor(
     fun deleteAllCacheAndRoom() {
         deleteJob = vmScope.launch(ioDispatcher) {
             deleteAllUsersUseCase.execute()
-            updateUiSuccess(Resource.Success(emptyList())) // to show msg "List is empty. Swipe down.."
+            updateUiSuccess(emptyList()) // to show msg "List is empty. Swipe down.."
         }
     }
 
@@ -82,12 +82,13 @@ class UsersViewModel @Inject constructor(
         wrapEspressoIdlingResource {
 
             try {
-
-                val resultResource = fetchUsersUseCase.execute()
-                updateUiSuccess(resultResource)
-
+                val datas: List<User>? = fetchUsersUseCase.execute()
+                if (datas != null && datas.isNotEmpty()) {
+                    updateUiSuccess(datas)
+                } else {
+                    updateUiError("Error: datas null or empty")
+                }
             } catch (e: Exception) {
-
                 DebugHelp.l("ERROR $e")
                 updateUiError("$e")
             }
