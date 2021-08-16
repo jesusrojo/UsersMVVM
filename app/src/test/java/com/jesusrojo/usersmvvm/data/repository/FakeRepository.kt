@@ -26,6 +26,10 @@ class FakeRepository : UsersRepository {
         datas.clear()
     }
 
+    override suspend fun deleteAllCache() {
+        datas.clear()
+    }
+
 
     //FAKE DATA AND DATAS FOR TEST
     companion object {

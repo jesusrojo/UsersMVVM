@@ -9,9 +9,10 @@ import javax.inject.Inject
 
 
 class UsersViewModelFactory @Inject constructor(
-        private val fetchUsersUseCase: FetchUsersUseCase,
-        private val deleteAllUsersUseCase: DeleteAllUsersUseCase,
-        private val ioDispatcher: CoroutineDispatcher
+    private val fetchUsersUseCase: FetchUsersUseCase,
+    private val deleteAllUseCase: DeleteAllUseCase,
+    private val deleteAllCacheUseCase: DeleteAllCacheUseCase,
+    private val ioDispatcher: CoroutineDispatcher
 ):ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -20,7 +21,8 @@ class UsersViewModelFactory @Inject constructor(
         if (modelClass.isAssignableFrom(UsersViewModel::class.java)) {
             return UsersViewModel(
                     fetchUsersUseCase,
-                    deleteAllUsersUseCase,
+                    deleteAllUseCase,
+                    deleteAllCacheUseCase,
                     ioDispatcher
             ) as T
         }

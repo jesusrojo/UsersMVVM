@@ -24,15 +24,14 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/menu_item_5"
-        android:title="Delete All"
+        android:title="Delete All Cache &amp; Room"
         android:orderInCategory="5"
         app:showAsAction="never"/>
 
-
-<!--    <item android:id="@+id/menu_item_6"-->
-<!--        android:title="UserActivity"-->
-<!--        android:orderInCategory="6"-->
-<!--        app:showAsAction="never"/>-->
+    <item android:id="@+id/menu_item_6"
+        android:title="Delete All Cache"
+        android:orderInCategory="6"
+        app:showAsAction="never"/>
 
 <!--    <item android:id="@+id/menu_item_7"-->
 <!--        android:title="LiveDataActivity"-->

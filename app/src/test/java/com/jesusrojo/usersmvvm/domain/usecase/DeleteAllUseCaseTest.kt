@@ -8,10 +8,10 @@ import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
-class DeleteAllUsersUseCaseTest: BaseUnitTest() {
+class DeleteAllUseCaseTest: BaseUnitTest() {
 
     private val repository: UsersRepository = mock()
-    private val sut = DeleteAllUsersUseCase(repository)
+    private val sut = DeleteAllUseCase(repository)
 
     @Test
     fun execute_callRepository() =

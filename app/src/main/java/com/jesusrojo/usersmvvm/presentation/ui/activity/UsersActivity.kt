@@ -51,4 +51,8 @@ class UsersActivity : BaseUiActivity() {
     override fun deleteAllCacheAndRoom() {
         viewModel.deleteAllCacheAndRoom()
     }
+
+    override fun deleteAllCache() {
+        viewModel.deleteAllCache()
+    }
 }

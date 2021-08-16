@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface UsersRepository {
     suspend fun fetchUsers(): Resource<List<User>>
     suspend fun deleteAll()
+    suspend fun deleteAllCache()
 }

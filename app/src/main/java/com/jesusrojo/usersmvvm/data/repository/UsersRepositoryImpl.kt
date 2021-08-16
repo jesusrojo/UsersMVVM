@@ -50,7 +50,7 @@ class UsersRepositoryImpl @Inject constructor(
 
         return if (isNotNullIsNotEmpty(results)) {
             cacheDataSource.saveDatasToCache(results!!)
-            Resource.Success(results!!)
+            Resource.Success(results)
         } else {
             fetchFromAPI()
         }
@@ -88,6 +88,11 @@ class UsersRepositoryImpl @Inject constructor(
         DebugHelp.l("deleteAll")
         cacheDataSource.deleteAllInCache()
         localDataSource.deleteAllInDB()
+    }
+
+    override suspend fun deleteAllCache() {
+        DebugHelp.l("deleteAllCache")
+        cacheDataSource.deleteAllInCache()
     }
 
     private fun isNotNullIsNotEmpty(datas: List<User>?) =

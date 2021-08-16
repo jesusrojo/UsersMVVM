@@ -5,10 +5,9 @@ import com.google.common.truth.Truth.assertThat
 import com.jesusrojo.usersmvvm.data.model.User
 import com.jesusrojo.usersmvvm.data.repository.FakeRepository
 import com.jesusrojo.usersmvvm.utils.Resource
-import com.jesusrojo.usersmvvm.domain.usecase.DeleteAllUsersUseCase
+import com.jesusrojo.usersmvvm.domain.usecase.DeleteAllUseCase
 import com.jesusrojo.usersmvvm.domain.usecase.FetchUsersUseCase
 import com.jesusrojo.usersmvvm.utils.BaseUnitTest
-import com.jesusrojo.usersmvvm.utils.LiveDataTestUtil
 import com.jesusrojo.usersmvvm.utils.getOrAwaitValue
 import com.jesusrojo.usersmvvm.utils.mock
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +24,7 @@ class UsersViewModelTest: BaseUnitTest() {
     fun setUp(){
         val fakeRepository = FakeRepository()
         val fetchUseCase = FetchUsersUseCase(fakeRepository)
-        val deleteAllUseCase = DeleteAllUsersUseCase(fakeRepository)
+        val deleteAllUseCase = DeleteAllUseCase(fakeRepository)
         val ioDispatcher = Dispatchers.IO
         sutFake = UsersViewModel(fetchUseCase, deleteAllUseCase, ioDispatcher)
     }
