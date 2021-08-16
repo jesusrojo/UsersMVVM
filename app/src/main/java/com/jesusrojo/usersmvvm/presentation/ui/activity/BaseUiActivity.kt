@@ -14,6 +14,7 @@ import com.jesusrojo.usersmvvm.data.model.User
 import com.jesusrojo.usersmvvm.databinding.ItemsLayoutBinding
 import com.jesusrojo.usersmvvm.presentation.di.Injection
 import com.jesusrojo.usersmvvm.presentation.ui.details.DetailsDialogFragment
+import com.jesusrojo.usersmvvm.utils.DebugHelp
 import com.jesusrojo.usersmvvm.utils.InternetHelp
 
 
@@ -87,7 +88,7 @@ abstract class BaseUiActivity : AppCompatActivity() {
     }
 
     private fun onRefreshAction() {
-        if (isNetworkNotAvailableShowMessage()) return
+       // if (isNetworkNotAvailableShowMessage()) return
         refreshDatas()
     }
 
@@ -102,16 +103,24 @@ abstract class BaseUiActivity : AppCompatActivity() {
         deleteAllCacheAndRoom()
     }
 
+    private fun onClickMenuTopRightDeleteAllCache() {
+        usersAdapter.deleteAll() // we delete all recycler from here,
+        // not from observer an also:
+        deleteAllCache()
+    }
+
     // ABSTRACTS ACTIONS
     protected abstract fun refreshDatas()
 
     protected abstract fun fetchNextDatas()
 
     protected abstract fun deleteAllCacheAndRoom()
+    protected abstract fun deleteAllCache()
 
 
     //UI UPDATES
     protected fun updateUiSuccess(datas: List<User>?) {
+        DebugHelp.l("updateUiSuccess")
         hideProgressBar()
 
         if (datas != null) {
@@ -130,6 +139,7 @@ abstract class BaseUiActivity : AppCompatActivity() {
     }
 
     protected fun updateUiError(message: String?) {
+        DebugHelp.l("updateUiError $message")
         hideProgressBar()
         if (message != null && message.isNotEmpty()) {
             showTextViewErrorWithMessage(message)
@@ -139,6 +149,7 @@ abstract class BaseUiActivity : AppCompatActivity() {
     }
 
     protected fun updateUiLoading() {
+        DebugHelp.l("updateUiLoading")
         showProgressBar()
         hideTextViewError()
     }
@@ -169,8 +180,9 @@ abstract class BaseUiActivity : AppCompatActivity() {
     }
 
     private fun showMsgBadList() {
-        val message = getString(R.string.list_is_empty) + "\n" + getString(R.string.swipe_down_to_get_fresh_data)
-        showTextViewErrorWithMessage(message)
+        val message = getString(R.string.list_is_empty) + "\n\n" + getString(R.string.swipe_down_to_get_fresh_data)
+        binding.textViewErrorItems.text = message
+        binding.textViewErrorItems.visibility = View.VISIBLE
     }
 
 
@@ -203,10 +215,10 @@ abstract class BaseUiActivity : AppCompatActivity() {
                 onClickMenuTopRightDeleteAll()
                 true
             }
-//            R.id.menu_item_6 -> {
-//                startMyActivity<UsersActivity>()
-//                true
-//            }
+            R.id.menu_item_6 -> {
+                onClickMenuTopRightDeleteAllCache()
+                true
+            }
 //            R.id.menu_item_7 -> {
 //                //startMyActivity<LiveDataUsersActivity>()
 //                true

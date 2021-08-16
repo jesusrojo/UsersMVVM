@@ -17,13 +17,15 @@ class ViewModelFactoryModule {
     @Singleton
     @Provides
     fun provideMyViewModelFactory(
-            fetchUsersUseCase: FetchUsersUseCase,
-            deleteAllUsersUseCase: DeleteAllUsersUseCase,
-            @IoDispatcher ioDispatcher: CoroutineDispatcher
+        fetchUsersUseCase: FetchUsersUseCase,
+        deleteAllUseCase: DeleteAllUseCase,
+        deleteAllCacheUseCase: DeleteAllCacheUseCase,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): UsersViewModelFactory {
         return UsersViewModelFactory(
             fetchUsersUseCase,
-            deleteAllUsersUseCase,
+            deleteAllUseCase,
+            deleteAllCacheUseCase,
             ioDispatcher
         )
     }

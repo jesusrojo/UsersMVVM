@@ -5,7 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.jesusrojo.usersmvvm.data.model.User
-import com.jesusrojo.usersmvvm.domain.usecase.DeleteAllUsersUseCase
+import com.jesusrojo.usersmvvm.domain.usecase.DeleteAllUseCase
 import com.jesusrojo.usersmvvm.domain.usecase.FetchUsersUseCase
 import com.jesusrojo.usersmvvm.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ class UsersViewModelTestMock {
     @Mock lateinit var observer: Observer<Resource<*>>
 
     @Mock lateinit var fetchUseCaseMock: FetchUsersUseCase
-    @Mock lateinit var deleteAllUseCaseMock: DeleteAllUsersUseCase
+    @Mock lateinit var deleteAllUseCaseMock: DeleteAllUseCase
     private val ioDispatcher = Dispatchers.IO
     @Mock lateinit var runtimeException: RuntimeException
 

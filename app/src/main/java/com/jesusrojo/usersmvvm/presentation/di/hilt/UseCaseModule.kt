@@ -25,7 +25,7 @@ class UseCaseModule {
     @Provides
     fun provideDeleteAllUseCase(
         repository: UsersRepository
-    ): DeleteAllUsersUseCase {
-        return DeleteAllUsersUseCase(repository)
+    ): DeleteAllUseCase {
+        return DeleteAllUseCase(repository)
     }
 }

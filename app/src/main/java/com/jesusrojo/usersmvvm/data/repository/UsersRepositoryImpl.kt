@@ -8,8 +8,8 @@ import com.jesusrojo.usersmvvm.data.repository.datasource.UsersRemoteDataSource
 import com.jesusrojo.usersmvvm.data.model.mappers.MapperRawToEnty
 import com.jesusrojo.usersmvvm.domain.repository.UsersRepository
 import com.jesusrojo.usersmvvm.utils.DebugHelp
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.jesusrojo.usersmvvm.utils.Resource
+import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -20,30 +20,26 @@ class UsersRepositoryImpl @Inject constructor(
     private val mapper: MapperRawToEnty
 ) : UsersRepository {
 
-    //List
-    override suspend fun fetchUsers(): List<User>? {
+    override suspend fun fetchUsers(): Resource<List<User>> {
         DebugHelp.l("fetchUsers")
         return fetchFromCache()
     }
 
-    private suspend fun fetchFromCache(): List<User>? {
-        DebugHelp.l("fetchFromCache")
-        var results: List<User>? = null
+    private suspend fun fetchFromCache(): Resource<List<User>> {
+        var results : List<User>? = null
         try {
             results = cacheDataSource.fetchDatasFromCache()
         } catch (exception: Exception) {
             DebugHelp.le(exception.message.toString())
         }
-        if (results != null && results.isNotEmpty()) {
-            return results
+        return if (isNotNullIsNotEmpty(results)) {
+            Resource.Success(results!!)
         } else {
-            results = fetchFromDB()
-            if (results != null) cacheDataSource.saveDatasToCache(results)
+            fetchFromDB()
         }
-        return results
     }
 
-    private suspend fun fetchFromDB(): List<User>? {
+    private suspend fun fetchFromDB(): Resource<List<User>> {
         DebugHelp.l("fetchFromDB")
         var results: List<User>? = null
         try {
@@ -51,30 +47,41 @@ class UsersRepositoryImpl @Inject constructor(
         } catch (exception: Exception) {
             DebugHelp.l(exception.message.toString())
         }
-        if (results != null && results.isNotEmpty()) {
-            return results
-        } else {
-            results = fetchFromAPI()
-            if (results != null) localDataSource.saveAllToDB(results)
-        }
 
-        return results
+        return if (isNotNullIsNotEmpty(results)) {
+            cacheDataSource.saveDatasToCache(results!!)
+            Resource.Success(results)
+        } else {
+            fetchFromAPI()
+        }
     }
 
-    private suspend fun fetchFromAPI(): List<User>? {
+    private suspend fun fetchFromAPI(): Resource<List<User>> {
         DebugHelp.l("fetchFromAPI")
-        var results: List<User>? = null
-        try {
+        return try {
             val response = remoteDataSource.fetchUsers()
+            handleResponse(response)
+        } catch (exception: Exception) {
+            val message = exception.message.toString()
+            DebugHelp.l(message)
+            Resource.Error(message)
+        }
+    }
+
+    private suspend fun handleResponse(response: Response<List<UserRaw>>): Resource<List<User>>{
+        var results: List<User>? = null
+        if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {
                 val rawDatas: List<UserRaw> = body
-                results = mapper(rawDatas)
+                if (rawDatas != null) {
+                    results = mapper(rawDatas)
+                    localDataSource.saveAllToDB(results)
+                    return Resource.Success(results)
+                }
             }
-        } catch (exception: Exception) {
-            DebugHelp.l(exception.message.toString())
         }
-        return results
+        return Resource.Error(response.errorBody().toString())
     }
 
     override suspend fun deleteAll() {
@@ -83,14 +90,22 @@ class UsersRepositoryImpl @Inject constructor(
         localDataSource.deleteAllInDB()
     }
 
-    override suspend fun fetchUsersFlow(): Flow<Result<List<User>>> =
-        remoteDataSource.fetchUsersFlow().map {
-            if (it.isSuccess) {
-                val datas = this.mapper(it.getOrNull()!!)
-                Result.success(datas)
-            } else
-                Result.failure(it.exceptionOrNull()!!)
-        }
+    override suspend fun deleteAllCache() {
+        DebugHelp.l("deleteAllCache")
+        cacheDataSource.deleteAllInCache()
+    }
+
+    private fun isNotNullIsNotEmpty(datas: List<User>?) =
+        datas != null && datas.isNotEmpty()
+
+//    override suspend fun fetchUsersFlow(): Flow<Result<List<User>>> =
+//        remoteDataSource.fetchUsersFlow().map {
+//            if (it.isSuccess) {
+//                val datas = this.mapper(it.getOrNull()!!)
+//                Result.success(datas)
+//            } else
+//                Result.failure(it.exceptionOrNull()!!)
+//        }
 
 
 ////////////////FLOW ERRORkotlin.Result cannot be cast to java.util.List
