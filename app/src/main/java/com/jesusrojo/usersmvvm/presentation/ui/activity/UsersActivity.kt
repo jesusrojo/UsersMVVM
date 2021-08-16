@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.jesusrojo.usersmvvm.utils.Resource
 import com.jesusrojo.usersmvvm.presentation.viewmodel.UsersViewModel
 import com.jesusrojo.usersmvvm.presentation.viewmodel.UsersViewModelFactory
+import com.jesusrojo.usersmvvm.utils.DebugHelp
 import dagger.hilt.android.AndroidEntryPoint
 import com.jesusrojo.usersmvvm.utils.exhaustive
 import javax.inject.Inject
@@ -30,6 +31,7 @@ class UsersActivity : BaseUiActivity() {
 
     private fun observeViewModel() {
         viewModel.resource.observe(this, { state ->
+            DebugHelp.l("observeViewModel")
             when (state) {
                 is Resource.Success -> updateUiSuccess(state.data)
                 is Resource.Error -> updateUiError(state.message)

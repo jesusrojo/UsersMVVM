@@ -17,9 +17,9 @@ class FakeRepository : UsersRepository {
         return datas
     }
 
-    override suspend fun fetchUsersFlow(): Flow<Result<List<User>>> {
-        TODO("Not yet implemented")
-    }
+//    override suspend fun fetchUsersFlow(): Flow<Result<List<User>>> {
+//        TODO("Not yet implemented")
+//    }
 
     override suspend fun deleteAll() {
         datas.clear()

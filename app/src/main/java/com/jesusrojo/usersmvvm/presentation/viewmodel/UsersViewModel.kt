@@ -34,7 +34,8 @@ class UsersViewModel @Inject constructor(
         _resource.postValue(Resource.Error(message))
     }
 
-    private fun updateUiSuccess(newResource: Resource<List<User>>) {
+    private fun updateUiResource(newResource: Resource<List<User>>) {
+        DebugHelp.l("updateUiResource")
         _resource.postValue(newResource)
     }
 
@@ -52,7 +53,7 @@ class UsersViewModel @Inject constructor(
     fun deleteAllCacheAndRoom() {
         deleteJob = vmScope.launch(ioDispatcher) {
             deleteAllUsersUseCase.execute()
-            updateUiSuccess(Resource.Success(emptyList())) // to show msg "List is empty. Swipe down.."
+            updateUiResource(Resource.Success(emptyList())) // to show msg "List is empty. Swipe down.."
         }
     }
 
@@ -84,7 +85,7 @@ class UsersViewModel @Inject constructor(
             try {
 
                 val resultResource = fetchUsersUseCase.execute()
-                updateUiSuccess(resultResource)
+                updateUiResource(resultResource)
 
             } catch (e: Exception) {
 

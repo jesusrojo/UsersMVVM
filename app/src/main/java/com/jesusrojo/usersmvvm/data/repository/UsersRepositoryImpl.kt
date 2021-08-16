@@ -9,8 +9,6 @@ import com.jesusrojo.usersmvvm.data.model.mappers.MapperRawToEnty
 import com.jesusrojo.usersmvvm.domain.repository.UsersRepository
 import com.jesusrojo.usersmvvm.utils.DebugHelp
 import com.jesusrojo.usersmvvm.utils.Resource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -22,25 +20,22 @@ class UsersRepositoryImpl @Inject constructor(
     private val mapper: MapperRawToEnty
 ) : UsersRepository {
 
-    //List
     override suspend fun fetchUsers(): Resource<List<User>> {
         DebugHelp.l("fetchUsers")
         return fetchFromCache()
     }
 
     private suspend fun fetchFromCache(): Resource<List<User>> {
-        DebugHelp.l("fetchFromCache")
         var results : List<User>? = null
         try {
             results = cacheDataSource.fetchDatasFromCache()
         } catch (exception: Exception) {
             DebugHelp.le(exception.message.toString())
         }
-
-        if (results != null && results.isNotEmpty()) {
-            return Resource.Success(results)
+        return if (isNotNullIsNotEmpty(results)) {
+            Resource.Success(results!!)
         } else {
-            return fetchFromDB()
+            fetchFromDB()
         }
     }
 
@@ -53,23 +48,23 @@ class UsersRepositoryImpl @Inject constructor(
             DebugHelp.l(exception.message.toString())
         }
 
-        if (results != null && results.isNotEmpty()) {
-            cacheDataSource.saveDatasToCache(results)
-            return Resource.Success(results)
+        return if (isNotNullIsNotEmpty(results)) {
+            cacheDataSource.saveDatasToCache(results!!)
+            Resource.Success(results!!)
         } else {
-            return fetchFromAPI()
+            fetchFromAPI()
         }
     }
 
     private suspend fun fetchFromAPI(): Resource<List<User>> {
         DebugHelp.l("fetchFromAPI")
-        try {
+        return try {
             val response = remoteDataSource.fetchUsers()
-             return handleResponse(response)
+            handleResponse(response)
         } catch (exception: Exception) {
             val message = exception.message.toString()
             DebugHelp.l(message)
-            return Resource.Error(message)
+            Resource.Error(message)
         }
     }
 
@@ -93,6 +88,9 @@ class UsersRepositoryImpl @Inject constructor(
         cacheDataSource.deleteAllInCache()
         localDataSource.deleteAllInDB()
     }
+
+    private fun isNotNullIsNotEmpty(datas: List<User>?) =
+        datas != null && datas.isNotEmpty()
 
 //    override suspend fun fetchUsersFlow(): Flow<Result<List<User>>> =
 //        remoteDataSource.fetchUsersFlow().map {
