@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MVVM Template</string>
+    <string name="list_is_empty">List is empty</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="website">Website</string>
+    <string name="user_name">UserName</string>
+    <string name="details">Details</string>
+    <string name="swipe_down_to_get_fresh_data">Swipe down the screen to get users</string>
+    <string name="error_no_internet">There is not Internet connection</string>
+    <string name="error">Error</string>
+<!--    <string name="error_generic">Something went wrong!</string>-->
+<!--    <string name="close">Close</string>-->
+</resources>

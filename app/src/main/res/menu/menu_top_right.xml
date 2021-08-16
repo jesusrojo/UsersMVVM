@@ -1,0 +1,52 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText" >
+
+    <item android:id="@+id/menu_item_1"
+        android:title="Sort by Name (01aA...01zZ)"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/menu_item_2"
+        android:title="Sort by userName (+...-)"
+        android:orderInCategory="2"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_item_3"
+        android:title="Sort by email (+...-)"
+        android:orderInCategory="3"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_item_4"
+        android:title="Sort by website (01aA...01zZ)"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_item_5"
+        android:title="Delete All"
+        android:orderInCategory="5"
+        app:showAsAction="never"/>
+
+
+<!--    <item android:id="@+id/menu_item_6"-->
+<!--        android:title="UserActivity"-->
+<!--        android:orderInCategory="6"-->
+<!--        app:showAsAction="never"/>-->
+
+<!--    <item android:id="@+id/menu_item_7"-->
+<!--        android:title="LiveDataActivity"-->
+<!--        android:orderInCategory="7"-->
+<!--        app:showAsAction="never"/>-->
+
+<!--    <item android:id="@+id/menu_item_8"-->
+<!--        android:title="FlowActivity"-->
+<!--        android:orderInCategory="8"-->
+<!--        app:showAsAction="never"/>-->
+
+<!--    <item android:id="@+id/menu_item_9"-->
+<!--        android:title="ResourceActivity"-->
+<!--        android:orderInCategory="9"-->
+<!--        app:showAsAction="never"/>-->
+
+</menu>
